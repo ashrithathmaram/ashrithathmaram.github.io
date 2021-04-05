@@ -159,46 +159,47 @@
                     <option value="21">21</option>
                     <option value="22">22</option>
                     <option value="23">23</option>
-                    <option value="24">00</option>
-                    <option value="25">01</option>
-                    <option value="26">02</option>
-                    <option value="27">03</option>
-                    <option value="28">04</option>
-                    <option value="29">05</option>
-                    <option value="30">06</option>
-                    <option value="31">07</option>
-                    <option value="32">08</option>
-                    <option value="33">09</option>
-                    <option value="34">10</option>
-                    <option value="35">11</option>
-                    <option value="36">12</option>
-                    <option value="37">13</option>
-                    <option value="38">14</option>
-                    <option value="39">15</option>
-                    <option value="40">16</option>
-                    <option value="41">17</option>
-                    <option value="42">18</option>
-                    <option value="43">19</option>
-                    <option value="44">20</option>
-                    <option value="45">21</option>
-                    <option value="46">22</option>
-                    <option value="47">23</option>
-                    <option value="48">00</option>
-                    <option value="49">01</option>
-                    <option value="50">02</option>
-                    <option value="51">03</option>
-                    <option value="52">04</option>
-                    <option value="53">05</option>
-                    <option value="54">06</option>
-                    <option value="55">07</option>
-                    <option value="56">08</option>
-                    <option value="57">09</option>
-                    <option value="58">10</option>
-                    <option value="59">11</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                    <option value="32">32</option>
+                    <option value="33">33</option>
+                    <option value="34">34</option>
+                    <option value="35">35</option>
+                    <option value="36">36</option>
+                    <option value="37">37</option>
+                    <option value="38">38</option>
+                    <option value="39">39</option>
+                    <option value="40">40</option>
+                    <option value="41">41</option>
+                    <option value="42">42</option>
+                    <option value="43">43</option>
+                    <option value="44">44</option>
+                    <option value="45">45</option>
+                    <option value="46">46</option>
+                    <option value="47">47</option>
+                    <option value="48">48</option>
+                    <option value="49">49</option>
+                    <option value="50">50</option>
+                    <option value="51">51</option>
+                    <option value="52">52</option>
+                    <option value="53">53</option>
+                    <option value="54">54</option>
+                    <option value="55">55</option>
+                    <option value="56">56</option>
+                    <option value="57">57</option>
+                    <option value="58">58</option>
+                    <option value="59">59</option>
                   </select>
+                  <button class="btn btn-primary" onclick="findSleep()">Confirm</button>
                 </form>
                 <label for="sleep-time">Your ideal sleep time is:</label>
-                <input type="text" id="sleep-time" autocomplete="off"><br><br>
+                <input type="text" id="sleep-time" autocomplete="off" value=""><br><br>
                 <button id="enable" type="button" class="btn btn-danger" onclick="askPermissionFunc()">
                   Enable notifications
                 </button>
@@ -232,16 +233,16 @@
             <!-- Card Body -->
             <div class="card-body" style="text-align:center">
               <div>
-                <button type="button" class="btn btn-success btn-lg">Start Timer</button>
-                <button type="button" class="btn btn-danger btn-lg" style="display:none;">Stop Timer</button>
+                <button type="button" class="btn btn-success btn-lg" id="start-timer" onclick="timerInterval()">Start Timer</button>
+                <button type="button" class="btn btn-danger btn-lg" id="stop-timer" style="display: none;" onclick="stopFunc()">Stop Timer</button>
               </div> <br>
               <div>
                 <label for="online-hour">You have been online for:</label>
-                <input type="text" id="online-hour" autocomplete="off" value=" " style="width: 50px">
+                <input type="text" id="online-hour" autocomplete="off" value="0" style="width: 50px">
                 <spam class="font-weight-bold" style="color: black">:</spam>
-                <input type="text" id="online-minute" autocomplete="off" value=" " style="width: 50px">
+                <input type="text" id="online-minute" autocomplete="off" value="0" style="width: 50px">
                 <spam class="font-weight-bold" style="color: black">:</spam>
-                <input type="text" id="online-second" autocomplete="off" value=" " style="width: 50px">
+                <input type="text" id="online-second" autocomplete="off" value="0" style="width: 50px">
               </div>
 
             </div>
@@ -265,14 +266,25 @@
 
   <script>
     const notificationBtn = document.getElementById('enable');
+    const wakeHour = document.getElementById('wake-hour');
+    const wakeMinute = document.getElementById('wake-minute');
+    const sleepTiming = document.getElementById('sleep-time');
+    var sleepTime;
+    var sleepHour;
+    var interval;
+    const onlineSecond = document.getElementById('online-second');
+    const onlineMinute = document.getElementById('online-minute');
+    const onlineHour = document.getElementById('online-hour');
+    var counterSec = parseInt(onlineSecond.value);
+    var counterMin = parseInt(onlineMinute.value);
+    var counterHr = parseInt(onlineHour.value);
+
+
+
     if(!('permission' in Notification)) {
       Notification.permission = permission;
     }
-    if(Notification.permission === 'denied' || Notification.permission === 'default') {
-    ;
-    } else {
-      notificationBtn.style.display = 'none';
-    }
+
     function askPermissionFunc() {
 
       Notification.requestPermission().then(function(result) {
@@ -288,5 +300,80 @@
         notificationBtn.style.display = 'none';
       }
     }
-    
+
+    function findSleep() {
+      if(parseInt(wakeHour.value) >= 8){
+        sleepHour = parseInt(wakeHour.value) - 8;
+      }
+      else {
+        sleepHour = parseInt(wakeHour.value) + 16;
+      }
+      sleepTime = String(String(sleepHour) + ":" + wakeMinute.value);
+      sleepTiming.value = sleepTime;
+    }
+
+
+
+    function timerInterval() {
+      interval = setInterval(function() {timerTrack()}, 1000);
+      document.getElementById('start-timer').style.display = "none";
+      document.getElementById('stop-timer').style.removeProperty("display");
+    }
+
+    function timerTrack() {
+      counterSec += 1;
+      if (counterSec >= 60){
+        counterSec -= 60;
+        counterMin++;
+      }
+      if (counterMin >= 60){
+        counterMin -= 60;
+        counterHr++;
+      }
+      onlineSecond.value = String(counterSec);
+      onlineMinute.value = String(counterMin);
+      onlineHour.value = String(counterHr);
+
+      if ((counterSec % 20) == 0){
+        let text = "HEY! You've been looking at your screen for 20 continuous minutes now. Take a break and look at an object 20 feet away for 20 seconds";
+        let notification = new Notification('ScreenAlert', { body: text });
+      }
+
+      const now = new Date();
+
+      const secondCheck = now.getSeconds();
+      const minuteCheck = now.getMinutes();
+      const hourCheck = now.getHours();
+
+      if (sleepTiming.value != "") {
+        if (sleepHour < 1) {
+          if (hourCheck == 23 && parseInt(wakeMinute.value) == minuteCheck && secondCheck == 1) {
+            let script = "HEY! It is now 1 hour before your ideal sleep time. Please turn off all devices for the rest of the night";
+            let notification = new Notification('ScreenAlert', { body: script });
+          }
+        }
+        if (sleepHour - 1 == hourCheck && parseInt(wakeMinute.value) == minuteCheck && secondCheck == 1) {
+          let txt = "HEY! It is now 1 hour before your ideal sleep time. Please turn off all devices for the rest of the night";
+          let notification = new Notification('ScreenAlert', { body: txt });
+        }
+      }
+
+      if (sleepTiming.value != "") {
+        if (sleepHour == hourCheck && parseInt(wakeMinute.value) == minuteCheck && secondCheck == 1) {
+          let txet = "HEY! It is now your ideal sleep time. Please go to sleep in order to get your recommended minimum 8 hours of sleep";
+          let notification = new Notification('ScreenAlert', { body: txet });
+        }
+      }
+    }
+
+    function stopFunc() {
+      clearInterval(interval);
+      document.getElementById('stop-timer').style.display = "none";
+      document.getElementById('start-timer').style.removeProperty("display");
+    }
+
+
+
+
+
   </script>
