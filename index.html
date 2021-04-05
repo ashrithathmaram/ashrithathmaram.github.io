@@ -102,8 +102,6 @@
               </div>
               <!-- Card Body -->
               <div class="card-body" style="text-align:center">
-
-                <form>
                   <p>Enter your desired wake up time:<p>
                   <label for="wake-hour">Hour:</label>
                     <select id="wake-hour">
@@ -196,8 +194,8 @@
                     <option value="58">58</option>
                     <option value="59">59</option>
                   </select>
-                  <button class="btn btn-primary" onclick="findSleep()">Confirm</button>
-                </form>
+
+                <button class="btn btn-primary" onclick="findSleep()" style="display: inline-block !important">Confirm</button> <br> <br>
                 <label for="sleep-time">Your ideal sleep time is:</label>
                 <input type="text" id="sleep-time" autocomplete="off" value=""><br><br>
                 <button id="enable" type="button" class="btn btn-danger" onclick="askPermissionFunc()">
