@@ -273,21 +273,20 @@
     } else {
       notificationBtn.style.display = 'none';
     }
-    window.onload = function() {
-      function askPermissionFunc() {
+    function askPermissionFunc() {
 
-        Notification.requestPermission().then(function(result) {
-          console.log(result);
-        });
+      Notification.requestPermission().then(function(result) {
+        console.log(result);
+      });
 
-        if(!('permission' in Notification)) {
-          Notification.permission = permission;
-        }
-        if(Notification.permission === 'denied' || Notification.permission === 'default') {
-        ;
-        } else {
-          notificationBtn.style.display = 'none';
-        }
+      if(!('permission' in Notification)) {
+        Notification.permission = permission;
+      }
+      if(Notification.permission === 'denied' || Notification.permission === 'default') {
+      ;
+      } else {
+        notificationBtn.style.display = 'none';
       }
     }
+    
   </script>
